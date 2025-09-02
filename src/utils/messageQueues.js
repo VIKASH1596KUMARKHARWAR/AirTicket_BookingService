@@ -13,6 +13,55 @@ const createChannel = async () => {
   }
 };
 
+// const subscribeMessage = async (channel, service, binding_key) => {
+//   try {
+//     const queueName = "REMINDER_QUEUE";
+
+//     // Ensure the exchange exists
+//     await channel.assertExchange(EXCHANGE_NAME, "direct", { durable: true });
+
+//     // Ensure the queue exists
+//     const applicationQueue = await channel.assertQueue(queueName, {
+//       durable: true,
+//     });
+
+//     // Bind the queue to the exchange with the binding key
+//     await channel.bindQueue(applicationQueue.queue, EXCHANGE_NAME, binding_key);
+
+//     // Consume messages
+//     channel.consume(applicationQueue.queue, (msg) => {
+//       if (msg !== null) {
+//         // Raw message (string)
+//         const payload = JSON.parse(msg.content.toString());
+//         try {
+//           if (payload.service == "DEMO_SERVICE") {
+//             //DO SOMETHING
+//             console.log("call demo service");
+//           }
+//         } catch {}
+
+//         // Log everything clearly
+//         // console.log("📤 Message sent:", rawMessage); // exactly what was sent
+//         console.log("🛠 Inside service layer:", payload);
+//         console.log(" Received data:", payload);
+
+//         // // Call service logic
+//         service.myService(payload);
+
+//         // Acknowledge
+//         channel.ack(msg);
+//       }
+//     });
+
+//     console.log(
+//       ` Subscribed to queue "${queueName}" with binding key "${binding_key}"`
+//     );
+//   } catch (error) {
+//     console.error(" Error subscribing to messages:", error);
+//     throw error;
+//   }
+// };
+
 const subscribeMessage = async (channel, service, binding_key) => {
   try {
     const queueName = "REMINDER_QUEUE";
@@ -33,20 +82,11 @@ const subscribeMessage = async (channel, service, binding_key) => {
       if (msg !== null) {
         // Raw message (string)
         const payload = JSON.parse(msg.content.toString());
-        try {
-          if (payload.service == "DEMO_SERVICE") {
-            //DO SOMETHING
-            console.log("call demo service");
-          }
-        } catch {}
+
+        service(payload);
 
         // Log everything clearly
-        // console.log("📤 Message sent:", rawMessage); // exactly what was sent
-        console.log("🛠 Inside service layer:", payload);
         console.log(" Received data:", payload);
-
-        // // Call service logic
-        service.myService(payload);
 
         // Acknowledge
         channel.ack(msg);
@@ -57,7 +97,7 @@ const subscribeMessage = async (channel, service, binding_key) => {
       ` Subscribed to queue "${queueName}" with binding key "${binding_key}"`
     );
   } catch (error) {
-    console.error(" Error subscribing to messages:", error);
+    console.error("Error subscribing to messages:", error);
     throw error;
   }
 };
