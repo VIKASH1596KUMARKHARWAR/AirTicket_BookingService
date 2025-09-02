@@ -38,7 +38,7 @@ const createChannel = async () => {
 
 const subscribeMessage = async (channel, service, binding_key) => {
   try {
-    const queueName = "QUEUE_NAME";
+    const queueName = "REMINDER_QUEUE";
 
     // 1. Ensure the exchange exists
     await channel.assertExchange(EXCHANGE_NAME, "direct", { durable: true });
@@ -109,7 +109,7 @@ const publisherMessage = async (channel, binding_key, message) => {
 
     // Optional: ensure the queue exists and is bound to the exchange
     // we can replace QUEUE_NAME with your actual queue name
-    const queueName = "QUEUE_NAME";
+    const queueName = "REMINDER_QUEUE";
     await channel.assertQueue(queueName, { durable: true });
     await channel.bindQueue(queueName, EXCHANGE_NAME, binding_key);
 
