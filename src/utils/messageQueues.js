@@ -102,13 +102,41 @@ const subscribeMessage = async (channel, service, binding_key) => {
   }
 };
 
+// const publisherMessage = async (channel, binding_key, message) => {
+//   try {
+//     // Ensure the exchange exists
+//     await channel.assertExchange(EXCHANGE_NAME, "direct", { durable: true });
+
+//     // Optional: ensure the queue exists and is bound to the exchange
+//     // we can replace QUEUE_NAME with your actual queue name
+//     const queueName = "REMINDER_QUEUE";
+//     await channel.assertQueue(queueName, { durable: true });
+//     await channel.bindQueue(queueName, EXCHANGE_NAME, binding_key);
+
+//     // Convert message to Buffer
+//     const bufferMessage = Buffer.from(
+//       typeof message === "string" ? message : JSON.stringify(message)
+//     );
+
+//     // Publish message to exchange with binding key
+//     channel.publish(EXCHANGE_NAME, binding_key, bufferMessage);
+
+//     console.log(
+//       `Message sent to exchange "${EXCHANGE_NAME}" with binding key "${binding_key}":`,
+//       message
+//     );
+//   } catch (error) {
+//     console.error("Error publishing message:", error);
+//     throw error;
+//   }
+// };
+
 const publisherMessage = async (channel, binding_key, message) => {
   try {
     // Ensure the exchange exists
     await channel.assertExchange(EXCHANGE_NAME, "direct", { durable: true });
 
-    // Optional: ensure the queue exists and is bound to the exchange
-    // we can replace QUEUE_NAME with your actual queue name
+    // Ensure the queue exists and is bound to the exchange
     const queueName = "REMINDER_QUEUE";
     await channel.assertQueue(queueName, { durable: true });
     await channel.bindQueue(queueName, EXCHANGE_NAME, binding_key);
@@ -118,15 +146,29 @@ const publisherMessage = async (channel, binding_key, message) => {
       typeof message === "string" ? message : JSON.stringify(message)
     );
 
-    // Publish message to exchange with binding key
-    channel.publish(EXCHANGE_NAME, binding_key, bufferMessage);
-
-    console.log(
-      `Message sent to exchange "${EXCHANGE_NAME}" with binding key "${binding_key}":`,
-      message
+    // Publish message to exchange with binding key, make it persistent
+    const isPublished = channel.publish(
+      EXCHANGE_NAME,
+      binding_key,
+      bufferMessage,
+      {
+        persistent: true, // ✅ ensures message is saved to disk if RabbitMQ restarts
+      }
     );
+
+    if (isPublished) {
+      console.log(
+        `✅ Message sent to exchange "${EXCHANGE_NAME}" with binding key "${binding_key}":`,
+        message
+      );
+    } else {
+      console.warn(
+        "⚠️ Message was not published (internal buffer full):",
+        message
+      );
+    }
   } catch (error) {
-    console.error("Error publishing message:", error);
+    console.error("❌ Error publishing message:", error);
     throw error;
   }
 };
