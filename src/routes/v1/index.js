@@ -19,6 +19,10 @@ const { BookingController } = require("../../controllers");
 const bookingController = new BookingController();
 const router = expres.Router();
 
+router.get("/info", (req, res) => {
+  return res.json({ message: "Response from the routes" });
+});
+
 // Wrap methods to preserve `this` context
 router.post("/bookings", (req, res) => bookingController.create(req, res));
 router.post("/publish", (req, res) =>

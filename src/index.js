@@ -13,6 +13,12 @@ const setupAndStartServer = () => {
 
   app.use("/api", apiRoutes);
 
+  app.get("/home", (req, res) => {
+    return res.json({
+      message: "Hitting the booking server",
+    });
+  });
+
   app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 
