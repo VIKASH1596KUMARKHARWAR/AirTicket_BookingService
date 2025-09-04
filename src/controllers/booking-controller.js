@@ -95,7 +95,6 @@
 
 // module.exports = BookingController;
 
-// controllers/BookingController.js
 const { StatusCodes } = require("http-status-codes");
 const { BookingService } = require("../services/index");
 
