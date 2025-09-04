@@ -11,6 +11,16 @@ It is part of the **microservices architecture** and handles all **flight bookin
 - Supports **integration with other services** (Flight, User) via API calls.
 - Serves **static assets** like images from the `assets` folder.
 
+## Related Projects / Services
+
+- [AirTicket API Gateway](https://github.com/VIKASH1596KUMARKHARWAR/AirTicket_API_GATEWAY)
+
+- [AirTicket Auth Service](https://github.com/VIKASH1596KUMARKHARWAR/Auth_Service)
+
+- [AirTicket Flight Service](https://github.com/VIKASH1596KUMARKHARWAR/FlightAndSearchService)
+
+- [AirTicket Remainder Service](https://github.com/VIKASH1596KUMARKHARWAR/AirTicket_RemainderService)
+
 ---
 
 ## Architecture
@@ -20,6 +30,30 @@ API Gateway → Booking Service → Database
             ↑
 Flight & User Services integration
 ```
+
+---
+
+## Assets
+
+![Booking routes](assets/booking-route.png)  
+_Booking routes_
+
+### learnings
+
+- 1. Modular project structure
+
+![modular project structure](assets/modular.png)  
+_modular project structure_
+
+- 2. Gracefully Handel error
+
+![error-handel](assets/proper-error-handleing.png)  
+_Gracefully Handel error_
+
+3. Clean code and class Based approach
+
+   ![clean code](assets/code.png)  
+   _Clean code and class Based approach_
 
 ---
 
@@ -92,23 +126,3 @@ cd AirTicket_Booking_Service
     }
 }
 ```
-
-![Booking routes](assets/booking-route.png)  
-_Booking routes_
-
-### learnings
-
-- 1. Modular project structure
-
-![modular project structure](assets/modular.png)  
-_modular project structure_
-
-- 2. Gracefully Handel error
-
-![error-handel](assets/proper-error-handleing.png)  
-_Gracefully Handel error_
-
-3. Clean code and class Based approach
-
-   ![clean code](assets/code.png)  
-   _Clean code and class Based approach_
